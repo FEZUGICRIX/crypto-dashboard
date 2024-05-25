@@ -11,7 +11,7 @@ import { useState, useRef } from "react";
 
 import useCrypto from "../hooks/useCrypto";
 
-const DrawerContent = () => {
+const DrawerContent = ({ setOpen }) => {
   const { crypto, addAsset } = useCrypto();
   const [coin, setCoin] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -67,16 +67,21 @@ const DrawerContent = () => {
   }
 
   if (success) {
+    const handleAddAgait = () => {
+      setCoin(null);
+      setSuccess(false);
+    };
+
     return (
       <Result
         status="success"
         title="New Asset Added"
         subTitle={`Added ${assetRef.current.amount} of ${assetRef.current.name} by price ${assetRef.current.price}`}
         extra={[
-          <Button type="primary" key="console">
-            Go Console
+          <Button onClick={() => setOpen(false)} type="primary">
+            Exit
           </Button>,
-          <Button key="buy">Buy Again</Button>,
+          <Button onClick={handleAddAgait}>Add again</Button>,
         ]}
       />
     );

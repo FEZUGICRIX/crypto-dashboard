@@ -60,15 +60,21 @@ const AppHeader = () => {
         )}
       />
 
-
       <Modal open={modal} onCancel={() => setModal(false)} footer={false}>
         <ModalInfo coin={coin} />
       </Modal>
 
-      <Button onClick={() => setDrawer(true)} type="primary">Add Asset</Button>
+      <Button onClick={() => setDrawer(true)} type="primary">
+        Add Asset
+      </Button>
 
-      <Drawer destroyOnClose title='Add Asset' onClose={() => setDrawer(false)} open={drawer}>
-        <DrawerContent />
+      <Drawer
+        destroyOnClose
+        title="Add Asset"
+        onClose={() => setDrawer(false)}
+        open={drawer}
+      >
+        <DrawerContent setOpen={setDrawer} />
       </Drawer>
     </Layout.Header>
   );

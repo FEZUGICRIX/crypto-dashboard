@@ -43,7 +43,7 @@ export const CryptoContextProvider = ({ children }) => {
   }, []);
 
   const addAsset = (newAsset) => {
-    setAsssets(prev => mapAssets([...prev, newAsset], crypto))
+    setAsssets((prev) => mapAssets([...prev, newAsset], crypto));
   };
 
   return (
