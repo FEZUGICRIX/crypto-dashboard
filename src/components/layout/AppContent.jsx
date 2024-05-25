@@ -5,7 +5,7 @@ const contentStyle = {
   minHeight: "calc(100vh - 60px)",
   lineHeight: "120px",
   color: "#fff",
-  backgroundColor: "#001529",
+  backgroundColor: "red",
 };
 
 const AppContent = () => {
