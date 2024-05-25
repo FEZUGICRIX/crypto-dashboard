@@ -15,8 +15,10 @@ const mapAssets = (assets, result) => {
 
     return {
       grow: a.price < coin.price,
+      totalAmount: a.amount * coin.price,
       totalProfit: a.amount * coin.price - a.amount * a.price,
       percentDifference: percentDifference(a.price, coin.price),
+      name: coin.name,
       ...a,
     };
   });

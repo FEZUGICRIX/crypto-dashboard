@@ -10,6 +10,7 @@ import {
 import { useState, useRef } from "react";
 
 import useCrypto from "../hooks/useCrypto";
+import CoinInfo from "../components/CoinInfo";
 
 const DrawerContent = ({ setOpen }) => {
   const { crypto, addAsset } = useCrypto();
@@ -88,68 +89,74 @@ const DrawerContent = ({ setOpen }) => {
   }
 
   return (
-    <Form
-      form={form}
-      name="basic"
-      labelCol={{
-        span: 8,
-      }}
-      wrapperCol={{
-        span: 18,
-      }}
-      initialValues={{
-        price: +coin.price.toFixed(2),
-      }}
-      onFinish={onFinish}
-      autoComplete="off"
-    >
-      <Form.Item
-        label="Asset amount"
-        name="amount"
-        rules={[
-          {
-            type: "number",
-            min: 0,
-            required: true,
-          },
-        ]}
-      >
-        <InputNumber onChange={handleAmountChange} style={{ width: "100%" }} />
-      </Form.Item>
-
-      <Form.Item
-        label="Price"
-        name="price"
-        rules={[
-          {
-            type: "number",
-            min: 0,
-            required: true,
-          },
-        ]}
-      >
-        <InputNumber onChange={handlePriceChange} style={{ width: "100%" }} />
-      </Form.Item>
-
-      <Form.Item label="Date & Time" name="date">
-        <DatePicker showTime />
-      </Form.Item>
-
-      <Form.Item label="Total" name="total">
-        <InputNumber disabled style={{ width: "100%" }} />
-      </Form.Item>
-
-      <Form.Item
-        wrapperCol={{
-          offset: 8,
-          span: 16,
+    <>
+      <CoinInfo coin={coin} />
+      <Form
+        form={form}
+        name="basic"
+        labelCol={{
+          span: 8,
         }}
+        wrapperCol={{
+          span: 18,
+        }}
+        initialValues={{
+          price: +coin.price.toFixed(2),
+        }}
+        onFinish={onFinish}
+        autoComplete="off"
       >
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item
+          label="Asset amount"
+          name="amount"
+          rules={[
+            {
+              type: "number",
+              min: 0,
+              required: true,
+            },
+          ]}
+        >
+          <InputNumber
+            onChange={handleAmountChange}
+            style={{ width: "100%" }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Price"
+          name="price"
+          rules={[
+            {
+              type: "number",
+              min: 0,
+              required: true,
+            },
+          ]}
+        >
+          <InputNumber onChange={handlePriceChange} style={{ width: "100%" }} />
+        </Form.Item>
+
+        <Form.Item label="Date & Time" name="date">
+          <DatePicker showTime />
+        </Form.Item>
+
+        <Form.Item label="Total" name="total">
+          <InputNumber disabled style={{ width: "100%" }} />
+        </Form.Item>
+
+        <Form.Item
+          wrapperCol={{
+            offset: 8,
+            span: 16,
+          }}
+        >
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    </>
   );
 };
 

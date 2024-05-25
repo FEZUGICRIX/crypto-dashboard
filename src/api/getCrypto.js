@@ -6,7 +6,7 @@ const apiKey = import.meta.env.VITE_API_KEY;
 
 export const getCrypto = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}coins`, {
+    const response = await axios.get(`${BASE_URL}coins?limit=50`, {
       headers: {
         accept: "application/json",
         "X-API-KEY": apiKey,
