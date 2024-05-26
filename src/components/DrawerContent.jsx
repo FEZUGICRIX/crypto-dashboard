@@ -26,8 +26,8 @@ const DrawerContent = ({ setOpen }) => {
       amount: value.amount,
       name: coin.name,
     };
-    assetRef.current = newAssets;
 
+    assetRef.current = newAssets;
     addAsset(newAssets);
     setSuccess(true);
   };
@@ -68,7 +68,8 @@ const DrawerContent = ({ setOpen }) => {
   }
 
   if (success) {
-    const handleAddAgait = () => {
+    const handleAddAgain = () => {
+      form.resetFields();
       setCoin(null);
       setSuccess(false);
     };
@@ -82,7 +83,7 @@ const DrawerContent = ({ setOpen }) => {
           <Button onClick={() => setOpen(false)} type="primary">
             Exit
           </Button>,
-          <Button onClick={handleAddAgait}>Add again</Button>,
+          <Button onClick={handleAddAgain}>Add again</Button>,
         ]}
       />
     );
@@ -94,15 +95,9 @@ const DrawerContent = ({ setOpen }) => {
       <Form
         form={form}
         name="basic"
-        labelCol={{
-          span: 8,
-        }}
-        wrapperCol={{
-          span: 18,
-        }}
-        initialValues={{
-          price: +coin.price.toFixed(2),
-        }}
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 18 }}
+        initialValues={{ price: +coin.price.toFixed(2) }}
         onFinish={onFinish}
         autoComplete="off"
       >
