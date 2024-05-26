@@ -1,5 +1,5 @@
 {
-  "name": "crypto-dashboard",
+  "name": "crypto-3",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,7 +12,9 @@
   "dependencies": {
     "antd": "^5.17.3",
     "axios": "^1.7.2",
+    "chart.js": "^4.4.3",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {

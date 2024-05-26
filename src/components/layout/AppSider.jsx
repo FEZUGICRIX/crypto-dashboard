@@ -27,7 +27,7 @@ const AppSider = () => {
                   flexDirection: "column",
                   alignItems: "flex-start",
                 }}
-                title={a.id}
+                title={a.name}
                 value={a.amount * coin.price}
                 precision={2}
                 valueStyle={{
@@ -58,6 +58,7 @@ const AppSider = () => {
                         </Tag>
                       )}
                       {item.value}
+                      {item.withTag && "$"}
                     </span>
                   </List.Item>
                 )}
