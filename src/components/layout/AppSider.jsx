@@ -40,12 +40,12 @@ const AppSider = () => {
                 dataSource={[
                   {
                     title: "Total Profit",
-                    value: a.totalProfit.toFixed(2),
+                    value: a.totalProfit.toLocaleString(),
                     withTag: true,
                   },
                   {
                     title: "Asset Amount",
-                    value: a.amount,
+                    value: a.amount.toLocaleString(),
                   },
                 ]}
                 renderItem={(item) => (
