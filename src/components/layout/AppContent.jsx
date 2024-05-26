@@ -21,7 +21,7 @@ const AppContent = () => {
         {assets
           .map((a) => a.totalAmount)
           .reduce((acc, v) => (acc += v), 0)
-          .toFixed(2)}
+          .toLocaleString()}
         $
       </Typography.Title>
 

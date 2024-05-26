@@ -12,15 +12,15 @@ const columns = [
     sortDirections: ["descend"],
   },
   {
-    title: "Price $",
-    dataIndex: "price",
+    title: "Total Profit, $",
+    dataIndex: "profit",
     defaultSortOrder: "descend",
-    sorter: (a, b) => a.price - b.price,
+    sorter: (a, b) => a.profit - b.profit,
   },
   {
     title: "Amount",
     dataIndex: "amount",
-    sorter: (a, b) => a.price - b.price,
+    sorter: (a, b) => a.profit - b.profit,
   },
 ];
 
@@ -33,8 +33,8 @@ const TableAssets = () => {
       pagination={false}
       dataSource={assets.map((a) => ({
         name: a.name,
-        price: a.price,
-        amount: a.amount,
+        profit: a.totalProfit.toLocaleString(),
+        amount: a.amount.toLocaleString(),
       }))}
       showSorterTooltip={{
         target: "sorter-icon",
