@@ -28,7 +28,7 @@ const ModalInfo = ({ coin }) => {
       </Paragraph>
       <Paragraph>
         <Text strong>Price: </Text>
-        <Text>{price.toFixed(2)}$</Text>
+        <Text>{price.toLocaleString()}$</Text>
       </Paragraph>
       <Paragraph>
         <Text strong>Price BTC: </Text>
@@ -36,7 +36,7 @@ const ModalInfo = ({ coin }) => {
       </Paragraph>
       <Paragraph>
         <Text strong>Market Cap: </Text>
-        <Text>{marketCap}$</Text>
+        <Text>{marketCap.toLocaleString()}$</Text>
       </Paragraph>
       {contractAddress && (
         <Paragraph>
