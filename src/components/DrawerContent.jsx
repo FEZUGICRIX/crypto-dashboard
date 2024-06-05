@@ -21,7 +21,7 @@ import { useCrypto } from '../hooks/useCrypto';
 import { useTheme } from '@emotion/react';
 
 const DrawerContent = () => {
-  const { addNewAsset } = useCrypto();
+  const { addNewAsset, crypto } = useCrypto();
   const [coin, setCoin] = useState(null);
   const [date, setDate] = useState(null);
   const [result, setResult] = useState(false);
@@ -75,12 +75,18 @@ const DrawerContent = () => {
 
   const handleAmountChange = () => {
     totalRef.current.value =
-      amountRef.current.value * priceRef.current.value;
+      amountRef.current.value * priceRef.current.value + '$';
   };
 
   const handlePriceChange = () => {
-    totalRef.current.value =
-      amountRef.current.value * priceRef.current.value;
+    const amount = parseFloat(amountRef.current.value);
+    const price = parseFloat(priceRef.current.value);
+  
+    if (!isNaN(amount) && !isNaN(price)) {
+      totalRef.current.value = `${(amount * price).toLocaleString()} $`;
+    } else {
+      totalRef.current.value = 'Invalid input';
+    }
   };
 
   const handleAddAsset = () => {
@@ -117,6 +123,7 @@ const DrawerContent = () => {
           type="number"
           inputProps={{ min: 0, step: 1 }}
           inputRef={priceRef}
+          defaultValue={coin.price.toFixed(3)}
           // value={value}
           onChange={handlePriceChange}
           variant="outlined"
@@ -135,12 +142,15 @@ const DrawerContent = () => {
           />
         </LocalizationProvider>
 
+
         <Box sx={{ mt: 10 }}>
           <InputLabel htmlFor="total">Total</InputLabel>
           <TextField
             id="total"
             inputRef={totalRef}
-            disabled
+            InputProps={{
+              readOnly: true,
+            }}
             variant="outlined"
             fullWidth
           />

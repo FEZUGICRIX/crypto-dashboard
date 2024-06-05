@@ -6,7 +6,6 @@ import {
   CardActions,
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const Result = ({ title, subTitle, extra }) => {
   return (
