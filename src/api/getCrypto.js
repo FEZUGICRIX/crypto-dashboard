@@ -1,20 +1,21 @@
-import axios from "axios";
-import { assets } from "../assets";
+import axios from 'axios';
+import { assets } from '../assets';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
-const apiKey = import.meta.env.VITE_API_KEY;
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 export const getCrypto = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}coins?limit=50`, {
+    const response = await axios.get(`${BASE_URL}coins`, {
       headers: {
-        accept: "application/json",
-        "X-API-KEY": apiKey,
+        accept: 'application/json',
+        'X-API-KEY': API_KEY,
       },
     });
+
     return response.data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -22,6 +23,6 @@ export const getAssets = async () => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(assets);
-    }, 1);
+    }, 10);
   });
 };

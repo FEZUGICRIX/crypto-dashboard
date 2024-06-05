@@ -1,22 +1,23 @@
 export const assets = [
   {
-    id: "bitcoin",
-    price: 4250,
+    id: 'bitcoin',
+    price: 54200,
+    amount: 0.02,
+  },
+  {
+    id: 'ethereum',
+    price: 1906,
     amount: 0.5,
   },
   {
-    id: "ethereum",
-    price: 2800,
-    amount: 1.5,
+    id: 'the-open-network',
+    price: 2.42,
+    amount: 250,
   },
+
   {
-    id: "pepe",
-    price: 0.0000995,
-    amount: 1500000000,
-  },
-  {
-    id: "solana",
-    price: 140,
-    amount: 100,
+    id: 'binance-coin',
+    price: 400,
+    amount: 3,
   },
 ];

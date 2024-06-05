@@ -1,157 +1,166 @@
+import { useRef, useState } from 'react';
 import {
-  Result,
-  Select,
+  Box,
+  Typography,
+  TextField,
+  InputLabel,
   Button,
-  Space,
-  Form,
-  DatePicker,
-  InputNumber,
-} from "antd";
-import { useState, useRef } from "react";
+  Snackbar,
+  Alert,
+} from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
 
-import useCrypto from "../hooks/useCrypto";
-import CoinInfo from "../components/CoinInfo";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-const DrawerContent = ({ setOpen }) => {
-  const { crypto, addAsset } = useCrypto();
+import CryptoSelect from './CryptoSelect';
+import CoinInfo from './CoinInfo';
+import Result from './Result';
+import { useCrypto } from '../hooks/useCrypto';
+import { useTheme } from '@emotion/react';
+
+const DrawerContent = () => {
+  const { addNewAsset, crypto } = useCrypto();
   const [coin, setCoin] = useState(null);
-  const [success, setSuccess] = useState(false);
-  const [form] = Form.useForm();
-  const assetRef = useRef();
-
-  const onFinish = (value) => {
-    const newAssets = {
-      id: coin.id,
-      price: value.price,
-      amount: value.amount,
-      name: coin.name,
-    };
-
-    assetRef.current = newAssets;
-    addAsset(newAssets);
-    setSuccess(true);
-  };
-
-  const handleAmountChange = (value) => {
-    const price = form.getFieldValue("price");
-    form.setFieldValue("total", +(value * price).toFixed(2));
-  };
-
-  const handlePriceChange = (value) => {
-    const amount = form.getFieldValue("amount");
-    form.setFieldValue("total", +(value * amount).toFixed(2));
-  };
-
-  const handleCoinChange = (value) => {
-    setCoin(crypto.find((c) => c.id === value));
-  };
+  const [date, setDate] = useState(null);
+  const [result, setResult] = useState(false);
+  const [snack, setSnack] = useState(false);
+  const amountRef = useRef();
+  const priceRef = useRef();
+  const totalRef = useRef();
+  const theme = useTheme();
 
   if (!coin) {
     return (
-      <Select
-        style={{ width: "100%" }}
-        placeholder="Select coin"
-        onChange={handleCoinChange}
-        options={crypto.map((c) => ({
-          label: c.name,
-          value: c.id,
-          icon: c.icon,
-        }))}
-        optionRender={(option) => (
-          <Space>
-            <img src={option.data.icon} alt="coin" style={{ width: 40 }} />
-            {option.data.label}
-          </Space>
-        )}
-      />
+      <Box sx={{ width: 375, m: 3 }}>
+        <Typography>Select coin</Typography>
+        <CryptoSelect coin={coin} setCoin={setCoin} />
+      </Box>
     );
   }
 
-  if (success) {
-    const handleAddAgain = () => {
-      form.resetFields();
-      setCoin(null);
-      setSuccess(false);
+  if (result) {
+    function SlideTransition(props) {
+      return <Slide {...props} direction="up" />;
+    }
+    return (
+      <>
+        <Box sx={{ width: 375, m: 3 }}>
+          <Result
+            title="New Asset Added"
+            subTitle={`Added ${amountRef.current?.value || 0} of ${
+              coin?.name || ''
+            } by price ${priceRef.current?.value || 0}`}
+          />
+        </Box>
+
+        <Snackbar
+          // sx={{bgcolor: theme.palette.secondary.main}}
+          open={snack}
+          // autoHideDuration={3000}
+          onClose={() => setSnack(false)}
+          message="New Asset Added"
+        >
+          <Alert
+            icon={<CheckIcon fontSize="inherit" />}
+            severity="success"
+          >
+            New Asset Added
+          </Alert>
+        </Snackbar>
+      </>
+    );
+  }
+
+  const handleAmountChange = () => {
+    totalRef.current.value =
+      amountRef.current.value * priceRef.current.value + '$';
+  };
+
+  const handlePriceChange = () => {
+    const amount = parseFloat(amountRef.current.value);
+    const price = parseFloat(priceRef.current.value);
+  
+    if (!isNaN(amount) && !isNaN(price)) {
+      totalRef.current.value = `${(amount * price).toLocaleString()} $`;
+    } else {
+      totalRef.current.value = 'Invalid input';
+    }
+  };
+
+  const handleAddAsset = () => {
+    const newAsset = {
+      id: coin.id,
+      price: priceRef.current.value,
+      amount: amountRef.current.value,
     };
 
-    return (
-      <Result
-        status="success"
-        title="New Asset Added"
-        subTitle={`Added ${assetRef.current.amount} of ${assetRef.current.name} by price ${assetRef.current.price}`}
-        extra={[
-          <Button onClick={() => setOpen(false)} type="primary">
-            Exit
-          </Button>,
-          <Button onClick={handleAddAgain}>Add again</Button>,
-        ]}
-      />
-    );
-  }
+    if (totalRef.current.value !== 0) {
+      addNewAsset(newAsset, crypto);
+      setResult(true);
+    }
+    setSnack(true);
+  };
 
   return (
-    <>
+    <Box sx={{ width: 375, m: 3 }}>
       <CoinInfo coin={coin} />
-      <Form
-        form={form}
-        name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 18 }}
-        initialValues={{ price: +coin.price.toFixed(2) }}
-        onFinish={onFinish}
-        autoComplete="off"
-      >
-        <Form.Item
+
+      <Box sx={{ mt: 1 }} display="flex" flexDirection="column" gap={1}>
+        <TextField
           label="Asset amount"
-          name="amount"
-          rules={[
-            {
-              type: "number",
-              min: 0,
-              required: true,
-            },
-          ]}
-        >
-          <InputNumber
-            onChange={handleAmountChange}
-            style={{ width: "100%" }}
-          />
-        </Form.Item>
-
-        <Form.Item
+          type="number"
+          inputProps={{ min: 0, step: 1 }}
+          // value={value}
+          inputRef={amountRef}
+          onChange={handleAmountChange}
+          variant="outlined"
+          // error={value.length < 3}
+        />
+        <TextField
           label="Price"
-          name="price"
-          rules={[
-            {
-              type: "number",
-              min: 0,
-              required: true,
-            },
-          ]}
-        >
-          <InputNumber onChange={handlePriceChange} style={{ width: "100%" }} />
-        </Form.Item>
+          type="number"
+          inputProps={{ min: 0, step: 1 }}
+          inputRef={priceRef}
+          defaultValue={coin.price.toFixed(3)}
+          // value={value}
+          onChange={handlePriceChange}
+          variant="outlined"
+          // error={value.length < 3}
+        />
 
-        <Form.Item label="Date & Time" name="date">
-          <DatePicker showTime />
-        </Form.Item>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <InputLabel htmlFor="date-picker">Date & Time</InputLabel>
 
-        <Form.Item label="Total" name="total">
-          <InputNumber disabled style={{ width: "100%" }} />
-        </Form.Item>
+          <DatePicker
+            id="date-picker"
+            value={date}
+            onChange={(newValue) => setDate(newValue)}
+            sx={{ width: '100%' }}
+            renderInput={(props) => <TextField {...props} />}
+          />
+        </LocalizationProvider>
 
-        <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
-    </>
+
+        <Box sx={{ mt: 10 }}>
+          <InputLabel htmlFor="total">Total</InputLabel>
+          <TextField
+            id="total"
+            inputRef={totalRef}
+            InputProps={{
+              readOnly: true,
+            }}
+            variant="outlined"
+            fullWidth
+          />
+        </Box>
+
+        <Button onClick={handleAddAsset} variant="contained">
+          Add Asset
+        </Button>
+      </Box>
+    </Box>
   );
 };
 
